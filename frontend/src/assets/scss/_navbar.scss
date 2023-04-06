@@ -1,0 +1,86 @@
+.navigation {
+	width: 100%;
+	height: 8rem;
+	background: #ffff;
+	display: flex;
+	align-items: center;
+	padding: 0.5rem 5rem;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 999;
+	box-shadow: 0 1rem 4rem rgba(rgba(17, 51, 51, 0.123), 0.2);
+
+	&__link {
+		text-decoration: none;
+		color: var(--color-grey);
+		position: relative;
+		transition: all 0.2s;
+		display: inline-block;
+		padding: 2px 1rem;
+
+		&:hover {
+			background-color: var(--color-primary);
+			color: #fff;
+		}
+	}
+
+	&__main {
+		display: flex;
+		flex-grow: 1;
+		list-style: none;
+		color: var(--color-dark);
+		margin-left: 1rem;
+		transition: all 0.2s;
+	}
+
+	.logo {
+		height: inherit;
+		margin-right: 2rem;
+	}
+
+	.logo img {
+		width: 15rem;
+		height: inherit;
+		object-fit: contain;
+	}
+
+	.logo a {
+		display: block;
+		height: 100%;
+	}
+}
+
+.navigation-menu {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	padding: 0;
+	margin: 0;
+	text-align: right;
+}
+
+.navigation-menu-item {
+	display: inline-block;
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+
+.navigation-action {
+	display: flex;
+	align-items: center;
+	margin-left: 2rem;
+}
+
+.navigation-menu-active {
+	font-weight: bold;
+	opacity: 1 !important;
+}
+
+// sticky
+.sticky {
+	padding: 0.3rem 5rem;
+	position: fixed;
+	top: 0;
+}

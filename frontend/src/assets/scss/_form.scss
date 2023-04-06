@@ -1,0 +1,78 @@
+.form {
+	padding: 3rem 2rem;
+	border: 2px solid var(--color-grey-light);
+	width: 40rem;
+
+	fieldset {
+		border: none;
+		display: flex;
+		flex-direction: column;
+		gap: 1.7rem;
+	}
+
+	label {
+		display: flex;
+		align-items: center;
+	}
+
+	&__input {
+		padding: 1rem;
+		border: 2px solid var(--color-grey-light);
+		outline: none;
+		font-family: var(--font-body);
+
+		&::placeholder {
+			font-family: var(--font-body);
+			color: var(--color-grey);
+		}
+	}
+
+	&__group {
+		display: flex;
+		flex-direction: column;
+
+		&--mt {
+			margin-top: 1.5rem;
+		}
+	}
+
+	&__option {
+		text-align: center;
+
+		a {
+			color: var(--color-primary);
+			text-decoration: none;
+		}
+	}
+
+	&__icon {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-left: 5px;
+
+		&--valid {
+			color: #017a30;
+		}
+
+		&--invalid {
+			color: #940000;
+		}
+	}
+}
+
+.instructions {
+	background-color: #ff8585;
+	color: #940000;
+	padding: 1rem;
+	margin-top: 1rem;
+}
+
+.offscreen {
+	position: absolute;
+	left: -9999px;
+}
+
+.hide {
+	display: none;
+}

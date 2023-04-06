@@ -1,0 +1,53 @@
+.basket-btn {
+	display: flex;
+	background-color: transparent;
+	font-size: 3rem;
+	border: none;
+	cursor: pointer;
+	color: var(--color-dark);
+	transition: all 0.3s;
+
+	&:hover {
+		color: var(--color-secondary);
+	}
+}
+
+.btn {
+	background-color: var(--color-dark);
+	padding: 1rem 2rem;
+	transition: all 0.2s;
+	font-size: 1.4rem;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	font-family: 'Tajawal', sans-serif;
+	text-decoration: none;
+
+	&:hover {
+		background-color: var(--color-secondary);
+		color: var(--color-dark);
+		transform: scale(1.1);
+		box-shadow: 0 2.5rem 2rem rgba(#1333, 0.2);
+	}
+
+	&--block {
+		background-color: var(--color-grey-light);
+		color: var(--color-grey);
+
+		&:hover {
+			background-color: var(--color-grey-light) !important;
+			box-shadow: none !important;
+			color: var(--color-grey) !important;
+		}
+	}
+}
+
+.with-full {
+	width: 100%;
+	&:hover {
+		background-color: var(--color-secondary);
+		color: var(--color-dark);
+		transform: none !important;
+		box-shadow: 0 2rem 2rem rgba(#1333, 0.2);
+	}
+}

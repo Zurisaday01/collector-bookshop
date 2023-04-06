@@ -1,0 +1,22 @@
+.hero {
+	background-image: linear-gradient(
+		to right top,
+		#2782f9,
+		#00a7ff,
+		#00c8ff,
+		#00e5ff,
+		#00fffb
+	);
+	height: 80vh;
+	width: 100%;
+	margin-top: 8rem;
+	clip-path: polygon(0 0, 100% 0, 100% 100%, 0 90%);
+
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	&__main {
+		// align-self: start;
+	}
+}
