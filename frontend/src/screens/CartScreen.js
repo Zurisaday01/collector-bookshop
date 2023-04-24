@@ -71,7 +71,10 @@ const CartScreen = () => {
 										<tr key={item._id} className='cart-screen__rows'>
 											<td className='cart-screen__book-info'>
 												<div className='cart-screen__img'>
-													<img src={item.image} alt={item.name} />
+													<img
+														src={`http://localhost:5000/public/${item.image}`}
+														alt={item.name}
+													/>
 												</div>
 												<div className='cart-screen__info'>
 													<span

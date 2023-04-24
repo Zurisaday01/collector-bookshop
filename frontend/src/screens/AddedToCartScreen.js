@@ -64,7 +64,10 @@ const AddedToCartScreen = () => {
 					<div className='added-screen__added'>
 						<div className='added-screen__contain'>
 							<div className='added-screen__image'>
-								<img src={currentItem.image} alt={currentItem.name} />
+								<img
+									src={`http://localhost:5000/images/${currentItem.image}`}
+									alt={currentItem.name}
+								/>
 							</div>
 							<div className='cart-screen__info'>
 								<h2 className='added-screen__heading'>

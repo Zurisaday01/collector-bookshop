@@ -40,6 +40,10 @@
 		margin-top: 3rem;
 	}
 
+	&__stars {
+		display: inline-block;
+	}
+
 	&__content {
 		display: flex;
 		gap: 7rem;

@@ -1,6 +1,39 @@
 import Product from '../models/productModel.js';
 import AppError from '../utils/appError.js';
 import catchAsync from '../utils/catchAsync.js';
+import multer from 'multer';
+import sharp from 'sharp';
+
+const multerStorage = multer.memoryStorage();
+
+const multerFileter = (req, file, cb) => {
+	if (file.mimetype.startsWith('image')) {
+		cb(null, true);
+	} else {
+		cb(new AppError('Not an image! Please upload only images.', 400), false);
+	}
+};
+
+const upload = multer({
+	storage: multerStorage,
+	fileFilter: multerFileter,
+});
+
+export const uploadProductPhoto = upload.single('image');
+
+export const resizeProductPhoto = (req, file, next) => {
+	if (!req.file) return next();
+
+	req.file.filename = `product-${req.params.id}-${Date.now()}.jpeg`;
+
+	sharp(req.file.buffer)
+		.resize(333, 500)
+		.toFormat('jpeg')
+		.jpeg({ quality: 90 })
+		.toFile(`backend/public/img/products/${req.file.filename}`);
+
+	next();
+};
 
 // @route	GET /api/products
 export const getAllProducts = catchAsync(async (req, res, next) => {
@@ -26,7 +59,7 @@ export const getAllProducts = catchAsync(async (req, res, next) => {
 
 // @route   GET /api/products/:id
 export const getProduct = catchAsync(async (req, res, next) => {
-	const product = await Product.findById(req.params.id);
+	const product = await Product.findById(req.params.id).populate('reviews');
 
 	if (!product) {
 		return next(new AppError('No product found with that ID', 404));
@@ -54,7 +87,11 @@ export const createProduct = catchAsync(async (req, res, next) => {
 
 // @route	PUT /api/products/:id
 export const updateProduct = catchAsync(async (req, res, next) => {
-	const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+	const bodyProduct = req.file
+		? { ...req.body, image: req.file.filename }
+		: req.body;
+
+	const product = await Product.findByIdAndUpdate(req.params.id, bodyProduct, {
 		new: true,
 		runValidators: true,
 	});

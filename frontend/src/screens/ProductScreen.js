@@ -13,6 +13,7 @@ import Btn from '../components/Btn';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import InputStepper from '../components/InputStepper';
+import Rating from '../components/Rating';
 
 const ProductScreen = () => {
 	const [qty, setQty] = useState(1);
@@ -49,80 +50,99 @@ const ProductScreen = () => {
 				) : hasError ? (
 					<Message variant='alert'> Something went wrong</Message>
 				) : product.status === 'success' ? (
-					<div className='product-screen__content'>
-						<div className='product-screen__left'>
-							<div className='product-screen__image'>
-								<img
-									src={product.data.product.image}
-									alt={product.data.product.name}></img>
-							</div>
+					<div>
+						<div className='product-screen__content'>
+							<div className='product-screen__left'>
+								<div className='product-screen__image'>
+									<img
+										src={`http://localhost:5000/images/${product.data.product.image}`}
+										alt={product.data.product.name}></img>
+								</div>
 
-							<div className='product-screen__details'>
-								{product.data.product.countInStock !== 0 ? (
-									<span className='product-screen__availability'>In Stock</span>
-								) : (
-									<span className='product-screen__availability'>
-										Unavailable
-									</span>
-								)}
+								<div className='product-screen__details'>
+									{product.data.product.countInStock !== 0 ? (
+										<span className='product-screen__availability'>
+											In Stock
+										</span>
+									) : (
+										<span className='product-screen__availability'>
+											Unavailable
+										</span>
+									)}
 
-								<table>
-									<tbody>
-										<tr>
-											<td>Price</td>
-											<td>${product.data.product.price}</td>
-										</tr>
-
-										{product.data.product.countInStock !== 0 ? (
+									<table>
+										<tbody>
 											<tr>
-												<td>Quantity</td>
-												<td className='product-screen__input'>
-													<InputStepper value={qty} changeQty={chageQty} />
+												<td>Price</td>
+												<td>${product.data.product.price}</td>
+											</tr>
+
+											{product.data.product.countInStock !== 0 ? (
+												<tr>
+													<td>Quantity</td>
+													<td className='product-screen__input'>
+														<InputStepper value={qty} changeQty={chageQty} />
+													</td>
+												</tr>
+											) : null}
+
+											<tr>
+												<td colSpan='2'>
+													<Btn
+														cartHandler={addToCartHandler}
+														utility='with-full'
+														disabled={product.data.product.countInStock === 0}>
+														Add to cart
+													</Btn>
 												</td>
 											</tr>
-										) : null}
-
-										<tr>
-											<td colSpan='2'>
-												<Btn
-													cartHandler={addToCartHandler}
-													utility='with-full'
-													disabled={product.data.product.countInStock === 0}>
-													Add to cart
-												</Btn>
-											</td>
-										</tr>
-									</tbody>
-								</table>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div className='product-screen__info'>
+								<div className='product-screen__heading'>
+									<h2 className='heading-secondary'>
+										{product.data.product.name}
+									</h2>
+									<span className='product-screen__author'>
+										By {product.data.product.author}
+									</span>
+									<div className='product-screen__stars'>
+										<Rating
+											ratingsAverage={product.data.product.ratingsAverage}
+										/>
+									</div>
+									<span className='product-screen__price'>
+										${product.data.product.price}
+									</span>
+								</div>
+								<div className='product-screen__description'>
+									{product.data.product.description
+										.split('/n')
+										.map((e, index) => (
+											<p className='product-screen__paragraph' key={index}>
+												{e}
+											</p>
+										))}
+								</div>
+								<div className='product-screen__genres'>
+									Genres
+									{product.data.product.category.map((e, index) => (
+										<span key={index}>{e}</span>
+									))}
+								</div>
 							</div>
 						</div>
-						<div className='product-screen__info'>
-							<div className='product-screen__heading'>
-								<h2 className='heading-secondary'>
-									{product.data.product.name}
-								</h2>
-								<span className='product-screen__author'>
-									By {product.data.product.author}
-								</span>
-								<span className='product-screen__price'>
-									${product.data.product.price}
-								</span>
-							</div>
-							<div className='product-screen__description'>
-								{product.data.product.description
-									.split('/n')
-									.map((e, index) => (
-										<p className='product-screen__paragraph' key={index}>
-											{e}
-										</p>
-									))}
-							</div>
-							<div className='product-screen__genres'>
-								Genres
-								{product.data.product.category.map((e, index) => (
-									<span key={index}>{e}</span>
-								))}
-							</div>
+
+						<div className='product-screen__reviews'>
+							<h2>Customer reviews</h2>
+
+							{product.data.product.reviews.map(review => {
+								<div>
+									<p>This is a review</p>;
+								</div>;
+							})}
 						</div>
 					</div>
 				) : null}

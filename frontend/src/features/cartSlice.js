@@ -60,7 +60,7 @@ export const cartReducer = createSlice({
 	},
 	reducers: {
 		// input: id
-		removeFromCart:  (state, action) => {
+		removeFromCart: (state, action) => {
 			const removeItem = state.cartItems.filter(
 				item => item._id !== action.payload
 			);

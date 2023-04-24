@@ -47,8 +47,6 @@ const CarouselBooks = () => {
 		}
 	}
 
-	console.log(bestsellerProducts);
-
 	useEffect(() => {
 		dispatch(fetchProducts());
 	}, [dispatch]);

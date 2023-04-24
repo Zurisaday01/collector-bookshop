@@ -3,6 +3,8 @@ import express from 'express';
 const router = express.Router();
 
 import {
+	uploadProductPhoto,
+	resizeProductPhoto,
 	getAllProducts,
 	getProduct,
 	deleteProduct,
@@ -10,9 +12,29 @@ import {
 	updateProduct,
 } from '../controllers/productController.js';
 
-// route handlers
-router.route('/').get(getAllProducts).post(createProduct);
+import { protect, restrictTo } from '../controllers/authController.js';
 
-router.route('/:id').get(getProduct).patch(updateProduct).delete(deleteProduct);
+import reviewRouter from './reviewRoutes.js';
+
+// if you have an url like this, then use the reviewRouter
+router.use('/:productId/reviews', reviewRouter);
+
+// route handlers
+router
+	.route('/')
+	.get(getAllProducts)
+	.post(protect, restrictTo('admin'), createProduct);
+
+router
+	.route('/:id')
+	.get(getProduct)
+	.patch(
+		protect,
+		restrictTo('admin'),
+		uploadProductPhoto,
+		resizeProductPhoto,
+		updateProduct
+	)
+	.delete(protect, restrictTo('admin'), deleteProduct);
 
 export default router;

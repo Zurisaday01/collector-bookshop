@@ -13,6 +13,8 @@ import Loader from '../components/Loader';
 const ShopScreen = () => {
 	const dispatch = useDispatch();
 	const productList = useSelector(state => state.productList);
+
+	console.log(productList);
 	const {
 		products: { products },
 		isLoading,

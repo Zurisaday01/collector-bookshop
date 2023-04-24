@@ -1,40 +1,7 @@
 import mongoose from 'mongoose';
 
-// review
-const reviewSchema = mongoose.Schema(
-	{
-		user: {
-			type: mongoose.Schema.Types.ObjectId,
-			required: true,
-			ref: 'User',
-		},
-		name: {
-			type: String,
-			required: true,
-		},
-		rating: {
-			type: String,
-			required: true,
-		},
-		comment: {
-			type: String,
-			required: true,
-		},
-	},
-	{
-		timestamps: true,
-	}
-);
-
-// product
-
 const productSchema = mongoose.Schema(
 	{
-		// user: {
-		// 	type: mongoose.Schema.Types.ObjectId,
-		// 	required: true,
-		// 	ref: 'User',
-		// },
 		name: {
 			type: String,
 			required: [true, 'A book must have a name'],
@@ -43,7 +10,7 @@ const productSchema = mongoose.Schema(
 		},
 		image: {
 			type: String,
-			required: true,
+			required: [true, 'A product must have an image'],
 		},
 		author: {
 			type: String,
@@ -56,15 +23,22 @@ const productSchema = mongoose.Schema(
 		description: {
 			type: String,
 			required: true,
+
 			minlength: [
 				200,
 				'A description book must have more or equal than 200 characters',
 			],
 		},
-		reviews: [reviewSchema],
-		rating: {
+		ratingsAverage: {
 			type: Number,
 			required: true,
+			default: 4.5,
+			min: [1, 'Rating must be above 1.0'],
+			max: [5, 'Rating must be below 5.0'],
+			set: val => Math.round(val * 10) / 10,
+		},
+		ratingsQuantity: {
+			type: Number,
 			default: 0,
 		},
 		numReviews: {
@@ -89,9 +63,20 @@ const productSchema = mongoose.Schema(
 		},
 	},
 	{
-		timestamps: true,
+		toObject: { virtuals: true },
+		toJSON: { virtuals: true },
 	}
 );
+
+productSchema.index({ price: 1 });
+
+// virtual populate
+// molule we want to reference
+productSchema.virtual('reviews', {
+	ref: 'Review',
+	foreignField: 'product',
+	localField: '_id',
+});
 
 const Product = mongoose.model('Product', productSchema);
 
