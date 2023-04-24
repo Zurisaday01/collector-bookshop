@@ -72,7 +72,7 @@ const CartScreen = () => {
 											<td className='cart-screen__book-info'>
 												<div className='cart-screen__img'>
 													<img
-														src={`http://localhost:5000/public/${item.image}`}
+														src={`http://localhost:5000/images/${item.image}`}
 														alt={item.name}
 													/>
 												</div>

@@ -14,18 +14,19 @@
 		display: flex;
 		gap: 3rem;
 		justify-content: space-between;
-		max-width: 90vw;
 		margin: 0 auto;
+		max-width: 90vw;
 	}
+
 	&__books {
+		max-width: 114rem;
 		flex-wrap: wrap;
 		gap: 2rem;
-		width: 114rem;
-		//
 	}
 
 	&--noproducts {
 		display: inline-block;
+		width: 100%;
 	}
 	&--products {
 		display: flex;

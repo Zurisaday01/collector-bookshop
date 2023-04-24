@@ -40,6 +40,7 @@ const ShopScreen = () => {
 		<div className='shop-screen'>
 			<div className='shop-screen__container'>
 				<SidebarCategories getCategory={setSelectedCategory} />
+
 				<div
 					className={`shop-screen__books ${
 						products
