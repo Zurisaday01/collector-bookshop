@@ -56,11 +56,6 @@ app.use(function (req, res, next) {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// 👇️ configure CORS
-// app.use(cors({ origin: true, credentials: true }));
-
-// app.options('*', cors());
-
 app.use('/images', express.static(path.join(__dirname, 'public/img/products')));
 app.use('/images', express.static(path.join(__dirname, 'public/img/users')));
 
@@ -100,6 +95,20 @@ app.get('/api/config/paypal', (req, res) => {
 	res.send(process.env.PAYPAL_CLIENT_ID);
 });
 
+if (process.env.NODE_ENV === 'production') {
+	// set static folder
+	app.use(express.static(path.join(__dirname, '/frontend/build')));
+
+	// any route that is not api will be redirected to index.html
+	app.get('*', (req, res) =>
+		res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
+	);
+} else {
+	app.get('/', (req, res) => {
+		res.send('API is running....');
+	});
+}
+
 // affect all http requests
 app.all('*', (req, res, next) => {
 	// read the next middleware
@@ -110,12 +119,14 @@ app.all('*', (req, res, next) => {
 // Global error middleware
 app.use(globalErrorHandler);
 
-// Serving static files
-// app.use(express.static(path.join(__dirname, 'public')));
-
 const port = process.env.PORT || 5000;
 
-app.listen(port, console.log(`Server running on port ${port}`.yellow.bold));
+app.listen(
+	port,
+	console.log(
+		`Server running in ${process.env.NODE_ENV} mode on port ${port}`.yellow.bold
+	)
+);
 
 // dotenv => package that automatically loads environment variables from a .env file into the process.env
 // morgan =>  is an HTTP request level Middleware
