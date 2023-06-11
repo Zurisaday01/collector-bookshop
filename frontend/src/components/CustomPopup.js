@@ -21,12 +21,9 @@ const CustomPopup = ({ setVisibility, visibility, title, children }) => {
 	const handleDelete = async () => {
 		dispatch(deleteAccuntStart());
 		try {
-			const res = await axios.delete(
-				'http://localhost:5000/api/users/deleteProfile',
-				{
-					withCredentials: true,
-				}
-			);
+			const res = await axios.delete('/api/users/deleteProfile', {
+				withCredentials: true,
+			});
 
 			// if it is suceesful then logout
 			dispatch(logout());

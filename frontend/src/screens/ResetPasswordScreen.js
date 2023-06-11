@@ -69,7 +69,7 @@ const ResetPasswordScreen = () => {
 		setLoading(true);
 		try {
 			const { data } = await axios.patch(
-				`http://localhost:5000/api/users//resetPassword/${token}`,
+				`/api/users//resetPassword/${token}`,
 				{
 					password: values.password,
 					passwordConfirm: values.passwordConfirm,

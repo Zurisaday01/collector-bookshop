@@ -36,7 +36,7 @@ const CreateReviewScreen = () => {
 
 		try {
 			const res = await axios.post(
-				'http://localhost:5000/api/reviews',
+				'/api/reviews',
 				{
 					product: productId,
 					rating: rating,

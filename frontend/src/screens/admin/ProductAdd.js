@@ -37,7 +37,7 @@ const ProductAdd = () => {
 
 		try {
 			const res = await axios.post(
-				'http://localhost:5000/api/products',
+				'/api/products',
 				{
 					name: name,
 					author: author,

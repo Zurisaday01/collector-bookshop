@@ -58,7 +58,7 @@ const SignInScreen = () => {
 		// sending data user input
 		try {
 			const { data } = await axios.post(
-				'http://localhost:5000/api/users/signin',
+				'/api/users/signin',
 				{
 					email: values.email,
 					password: values.password,

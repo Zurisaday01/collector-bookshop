@@ -36,7 +36,7 @@ const SignUpScreen = () => {
 			id: 1,
 			name: 'name',
 			type: 'text',
-			placeholder: 'Your name and last name',
+			placeholder: 'First and last name',
 			title:
 				'Characters in the range (Aa - Zz), must contain a space ( ) and numbers, underscores, hyphens are not allowed',
 			label: 'Your name',
@@ -84,7 +84,7 @@ const SignUpScreen = () => {
 		const confirm_password = document.getElementById('4');
 
 		if (password.value !== confirm_password.value) {
-			confirm_password.setCustomValidity("Passwords Don't Match");
+			confirm_password.setCustomValidity(confirm_password.title);
 		} else {
 			confirm_password.setCustomValidity('');
 		}
@@ -99,7 +99,7 @@ const SignUpScreen = () => {
 		// sending data user input
 		try {
 			const { data } = await axios.post(
-				'http://localhost:5000/api/users/signup',
+				'/api/users/signup',
 				{
 					name: values.name,
 					email: values.email,

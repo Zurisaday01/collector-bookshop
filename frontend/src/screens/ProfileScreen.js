@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
@@ -39,10 +39,9 @@ const ProfileScreen = ({ isPhotoUpdated, setIsPhotoUpdated }) => {
 		const getProfile = async () => {
 			try {
 				if (isPhotoUpdated) {
-					const { data } = await axios.get(
-						'http://localhost:5000/api/users/yourProfile',
-						{ withCredentials: true }
-					);
+					const { data } = await axios.get('/api/users/yourProfile', {
+						withCredentials: true,
+					});
 
 					setUserPhoto(data.data.user.photo);
 
@@ -101,7 +100,7 @@ const ProfileScreen = ({ isPhotoUpdated, setIsPhotoUpdated }) => {
 							<div className='profile-screen__photo'>
 								{(userPhoto || user.currentUser.photo) && (
 									<img
-										src={`http://localhost:5000/images/${
+										src={`/images/${
 											isPhotoUpdated ? userPhoto : user.currentUser.photo
 										}`}
 										alt={user.currentUser.name}></img>
@@ -181,7 +180,7 @@ const ProfileScreen = ({ isPhotoUpdated, setIsPhotoUpdated }) => {
 				{(success || failure) && <TopBarProgress />}
 
 				<Alert type='success' screen='profile' showAlert={success}>
-					Your changes has been successfully made 😎!
+					Your changes have been successfully made 😎!
 				</Alert>
 
 				<Alert type='fail' screen='profile' showAlert={failure}>

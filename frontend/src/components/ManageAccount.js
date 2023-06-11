@@ -63,7 +63,7 @@ const ManageAccount = ({ setSuccess, setFailure, setNewMessage }) => {
 
 		try {
 			const data = await axios.patch(
-				'http://localhost:5000/api/users/updateMyPassword',
+				'/api/users/updateMyPassword',
 				{
 					passwordCurrent: values.passwordCurrent,
 					password: values.password,

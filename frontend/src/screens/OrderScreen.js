@@ -33,9 +33,7 @@ const OrderScreen = () => {
 
 	useEffect(() => {
 		const addPayPalScript = async () => {
-			const { data: clientId } = await axios.get(
-				'http://localhost:5000/api/config/paypal'
-			);
+			const { data: clientId } = await axios.get('/api/config/paypal');
 			// create an script
 			const script = document.createElement('script');
 			script.type = 'text/javascript';
@@ -66,13 +64,9 @@ const OrderScreen = () => {
 		dispatch(orderPayStart());
 
 		try {
-			const { data } = await axios.put(
-				`http://localhost:5000/api/orders/${id}/pay`,
-				paymentResult,
-				{
-					withCredentials: true,
-				}
-			);
+			const { data } = await axios.put(`/api/orders/${id}/pay`, paymentResult, {
+				withCredentials: true,
+			});
 			dispatch(orderPaySuccess());
 			dispatch(orderPayUpdate(data.data.order));
 			// // if success pay then reset order
@@ -149,7 +143,7 @@ const OrderScreen = () => {
 													<td className='cart-screen__book-info'>
 														<div className='cart-screen__img'>
 															<img
-																src={`http://localhost:5000/images/${item.image}`}
+																src={`/images/${item.image}`}
 																alt={item.name}
 															/>
 														</div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import ConfettiExplosion from 'react-confetti-explosion';
 
@@ -64,7 +64,7 @@ const AddedToCartScreen = () => {
 							<div className='added-screen__contain'>
 								<div className='added-screen__image'>
 									<img
-										src={`http://localhost:5000/images/${currentItem.image}`}
+										src={`/images/${currentItem.image}`}
 										alt={currentItem.name}
 									/>
 								</div>

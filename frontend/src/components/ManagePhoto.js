@@ -30,11 +30,9 @@ const ManagePhoto = ({ setSuccess, setFailure, setIsPhotoUpdated }) => {
 
 	const updateUserPhoto = async formData => {
 		try {
-			const { data } = await axios.patch(
-				'http://localhost:5000/api/users/updateProfile',
-				formData,
-				{ withCredentials: true }
-			);
+			const { data } = await axios.patch('/api/users/updateProfile', formData, {
+				withCredentials: true,
+			});
 
 			dispatch(updatePhoto(data.data.user.photo));
 

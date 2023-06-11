@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export const fetchReview = createAsyncThunk('fetchReview', async id => {
 	try {
-		const { data } = await axios.get(`http://localhost:5000/api/reviews/${id}`);
+		const { data } = await axios.get(`/api/reviews/${id}`);
 		return data.data.review;
 	} catch (error) {
 		console.error(error);
@@ -12,7 +12,7 @@ export const fetchReview = createAsyncThunk('fetchReview', async id => {
 
 export const fetchReviews = createAsyncThunk('fetchReviews', async () => {
 	try {
-		const { data } = await axios.get('http://localhost:5000/api/reviews', {
+		const { data } = await axios.get('/api/reviews', {
 			withCredentials: true,
 		});
 

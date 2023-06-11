@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export const fetchOrders = createAsyncThunk('fetchOrders', async () => {
 	try {
-		const { data } = await axios.get('http://localhost:5000/api/orders', {
+		const { data } = await axios.get('/api/orders', {
 			withCredentials: true,
 		});
 
@@ -15,7 +15,7 @@ export const fetchOrders = createAsyncThunk('fetchOrders', async () => {
 
 export const fetchAllOrders = createAsyncThunk('fetchAllOrders', async () => {
 	try {
-		const { data } = await axios.get('http://localhost:5000/api/orders/admin', {
+		const { data } = await axios.get('/api/orders/admin', {
 			withCredentials: true,
 		});
 
@@ -27,7 +27,7 @@ export const fetchAllOrders = createAsyncThunk('fetchAllOrders', async () => {
 
 export const fetchOrder = createAsyncThunk('fetchOrder', async id => {
 	try {
-		const { data } = await axios.get(`http://localhost:5000/api/orders/${id}`, {
+		const { data } = await axios.get(`/api/orders/${id}`, {
 			withCredentials: true,
 		});
 

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Btn from '../../components/Btn';
@@ -76,13 +76,9 @@ const ProductEdit = () => {
 		formData.append('bestseller', check);
 
 		try {
-			const res = await axios.patch(
-				`http://localhost:5000/api/products/${id}`,
-				formData,
-				{
-					withCredentials: true,
-				}
-			);
+			const res = await axios.patch(`/api/products/${id}`, formData, {
+				withCredentials: true,
+			});
 			dispatch(editSuccess());
 
 			setIsSuccess(true);
@@ -138,7 +134,7 @@ const ProductEdit = () => {
 									<label htmlFor='file'>Current Image</label>
 									<div className='product-edit__image'>
 										<img
-											src={`http://localhost:5000/images/${data.product.image}`}
+											src={`/images/${data.product.image}`}
 											alt={data.product.image}
 										/>
 									</div>

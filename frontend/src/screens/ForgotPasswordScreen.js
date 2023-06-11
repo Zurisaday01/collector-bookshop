@@ -30,15 +30,13 @@ const ForgotPasswordScreen = () => {
 		},
 	];
 
-	
-
 	const handleSubmit = async e => {
 		e.preventDefault();
 
 		setLoading(true);
 		try {
 			const { data } = await axios.post(
-				'http://localhost:5000/api/users/forgotPassword',
+				'/api/users/forgotPassword',
 				{
 					email,
 				},

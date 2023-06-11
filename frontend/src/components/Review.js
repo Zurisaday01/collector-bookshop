@@ -12,12 +12,10 @@ const Review = ({ review, isCurrentUser }) => {
 				<div className='review__photo'>
 					{review.user ? (
 						<img
-							src={`http://localhost:5000/images/${review.user.photo}`}
+							src={`/images/${review.user.photo}`}
 							alt={review.user.name}></img>
 					) : (
-						<img
-							src={`http://localhost:5000/images/default.png`}
-							alt='Deleted user'></img>
+						<img src={`/images/default.png`} alt='Deleted user'></img>
 					)}
 				</div>
 				<div className='review__info'>

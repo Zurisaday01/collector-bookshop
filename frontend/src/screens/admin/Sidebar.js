@@ -30,7 +30,7 @@ const Sidebar = ({ isAdmin }) => {
 
 	const logoutUser = async () => {
 		try {
-			const res = await axios.get('http://localhost:5000/api/users/logout', {
+			const res = await axios.get('/api/users/logout', {
 				withCredentials: true,
 			});
 

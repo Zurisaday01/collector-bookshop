@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { updateStart, updateUser, updateFailure } from '../features/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -53,7 +53,7 @@ const ManageProfile = ({ setSuccess, setFailure }) => {
 		// update
 		try {
 			const { data } = await axios.patch(
-				'http://localhost:5000/api/users/updateProfile',
+				'/api/users/updateProfile',
 				{
 					name: values.name,
 					email: values.email,

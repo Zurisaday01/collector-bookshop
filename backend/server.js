@@ -84,11 +84,11 @@ app.use(express.json());
 
 app.use(cookieParser());
 // test middleware
-app.use((req, res, next) => {
-	// it's an object that contains cookies sent by request in JSON after parsing.
-	console.log(req.cookies);
-	next();
-});
+// app.use((req, res, next) => {
+// 	// it's an object that contains cookies sent by request in JSON after parsing.
+// 	console.log(req.cookies);
+// 	next();
+// });
 
 // ROUTES
 app.use('/api/products', productRoutes);

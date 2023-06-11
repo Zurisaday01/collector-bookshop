@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React from 'react';
 
 const InputStepper = ({ value, changeQty, countInStock }) => {
 	const min = 1;

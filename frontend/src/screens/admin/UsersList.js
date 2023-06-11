@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import Btn from '../../components/Btn';
 import axios from 'axios';
 
 // Redux
@@ -49,11 +48,9 @@ const UsersList = () => {
 	const dispatch = useDispatch();
 	const { users, isLoading: loading } = useSelector(state => state.usersList);
 
-	const {
-		success,
-		loading: loadingDelete,
-		error,
-	} = useSelector(state => state.userAdminDelete);
+	const { loading: loadingDelete } = useSelector(
+		state => state.userAdminDelete
+	);
 
 	useEffect(() => {
 		dispatch(fetchUsers());
@@ -65,7 +62,7 @@ const UsersList = () => {
 
 		// axios delete
 		try {
-			const res = await axios.delete(`http://localhost:5000/api/users/${id}`, {
+			const res = await axios.delete(`/api/users/${id}`, {
 				withCredentials: true,
 			});
 

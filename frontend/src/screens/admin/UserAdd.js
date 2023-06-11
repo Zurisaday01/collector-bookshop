@@ -1,11 +1,7 @@
-import { useRef, useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 // Nav
 import { Link } from 'react-router-dom';
-
-// icons
-import { AiFillCheckCircle } from 'react-icons/ai';
-import { FaTimesCircle } from 'react-icons/fa';
 
 // components
 import Btn from '../../components/Btn';
@@ -19,12 +15,7 @@ import {
 	createSuccess,
 	createFailure,
 } from '../../features/userSlice';
-
-// validate regex
-const USER_REGEX =
-	/(^[A-Za-z]{3,16})([ ]{0,1})([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})/;
-const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-const PWD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/;
+import FormInput from '../../components/FormInput';
 
 const UserAdd = () => {
 	const { loading } = useSelector(state => state.userAdminCreate);
@@ -34,50 +25,73 @@ const UserAdd = () => {
 	const [isSuccess, setIsSuccess] = useState(false);
 	const [isFailure, setIsFailure] = useState(false);
 
-	const userRef = useRef();
-
-	const [user, setUser] = useState('');
-	const [validName, setValidName] = useState(false);
-	const [userFocus, setUserFocus] = useState(false);
-
-	const [email, setEmail] = useState('');
-	const [validEmail, setValidEmail] = useState(false);
-	const [emailFocus, setEmailFocus] = useState(false);
-
-	const [pwd, setPwd] = useState('');
-	const [validPwd, setValidPwd] = useState(false);
-	const [pwdFocus, setPwdFocus] = useState(false);
-
-	const [matchPwd, setMatchPwd] = useState('');
-	const [validMatch, setValidMatch] = useState(false);
-	const [matchFocus, setMatchFocus] = useState(false);
-
+	const [values, setValues] = useState({
+		name: '',
+		email: '',
+		password: '',
+		passwordConfirm: '',
+	});
 	// default
 	const [role, setRole] = useState('user');
 
-	useEffect(() => {
-		userRef.current.focus();
-	}, []);
+	const inputs = [
+		{
+			id: 1,
+			name: 'name',
+			type: 'text',
+			placeholder: 'First and last name',
+			title:
+				'Characters in the range (Aa - Zz), must contain a space ( ) and numbers, underscores, hyphens are not allowed',
+			label: 'Your name',
+			pattern:
+				'(^[A-Za-z]{3,16})([ ]{0,1})([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})',
+			required: true,
+		},
+		{
+			id: 2,
+			name: 'email',
+			type: 'email',
+			placeholder: 'example@gmail.com',
+			title: 'It should be a valid email address!',
+			label: 'Email',
+			pattern: '^[w-.]+@([w-]+.)+[w-]{2,4}$',
+			required: true,
+		},
 
-	// validate the user name
-	useEffect(() => {
-		// is the name valid? true, false
-		setValidName(USER_REGEX.test(user));
-	}, [user]);
+		{
+			id: 3,
+			name: 'password',
+			type: 'password',
+			placeholder: 'At least 6 characters',
+			title:
+				'Password should be at least 6 characters and include at least 1 letter, 1 number and 1 special character! Uppercase (A-Z) and lowercase (a-z) English letters',
+			label: 'Password',
+			pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$`,
+			required: true,
+		},
+		{
+			id: 4,
+			name: 'passwordConfirm',
+			type: 'password',
+			title: 'Must match the first password input field.',
+			label: 'Re-enter password',
+			pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$`,
+			required: true,
+		},
+	];
 
-	// validate the user email
-	useEffect(() => {
-		// is the name valid? true, false
-		setValidEmail(EMAIL_REGEX.test(email));
-	}, [email]);
+	const onChange = e => {
+		setValues({ ...values, [e.target.name]: e.target.value });
 
-	// validate the password
-	useEffect(() => {
-		setValidPwd(PWD_REGEX.test(pwd));
-		// check is the passwords are the same [password] === [re-enter password]
-		// Do they match? is it valid? true, false
-		setValidMatch(pwd === matchPwd);
-	}, [pwd, matchPwd]);
+		const password = document.getElementById('3');
+		const confirm_password = document.getElementById('4');
+
+		if (password.value !== confirm_password.value) {
+			confirm_password.setCustomValidity(confirm_password.title);
+		} else {
+			confirm_password.setCustomValidity('');
+		}
+	};
 
 	const handleSubmit = async e => {
 		e.preventDefault();
@@ -87,12 +101,12 @@ const UserAdd = () => {
 
 		try {
 			const res = await axios.post(
-				'http://localhost:5000/api/users/create',
+				'/api/users/create',
 				{
-					name: user,
-					email: email,
-					password: pwd,
-					passwordConfirm: matchPwd,
+					name: values.name,
+					email: values.email,
+					password: values.password,
+					passwordConfirm: values.passwordConfirm,
 					role: role,
 				},
 				{
@@ -106,20 +120,30 @@ const UserAdd = () => {
 			setIsSuccess(true);
 			setTimeout(() => setIsSuccess(false), 2000);
 
+			// clear inputs
+			setValues({
+				name: '',
+				email: '',
+				password: '',
+				passwordConfirm: '',
+			});
+
 			// clean inputs
-			setPwd('');
-			setMatchPwd('');
 			e.target.reset();
 		} catch (error) {
 			dispatch(createFailure());
-			console.log(error);
 			// show and hide alert
 			setIsFailure(true);
 			setTimeout(() => setIsFailure(false), 2000);
 			// clean inputs
+
+			setValues({
+				name: '',
+				email: '',
+				password: '',
+				passwordConfirm: '',
+			});
 			e.target.reset();
-			setPwd('');
-			matchPwd('');
 		}
 	};
 
@@ -142,188 +166,14 @@ const UserAdd = () => {
 				<form className='form u-no-border form--crud' onSubmit={handleSubmit}>
 					<fieldset>
 						<legend className='heading-secondary'>Add User</legend>
-						<p className='form__group'>
-							<label htmlFor='name'>
-								Name
-								<span
-									className={
-										validName ? 'form__icon form__icon--valid' : 'hide'
-									}>
-									<AiFillCheckCircle />
-								</span>
-								<span
-									className={
-										validName || !user
-											? 'hide'
-											: 'form__icon form__icon--invalid'
-									}>
-									<FaTimesCircle />
-								</span>
-							</label>
-							<input
-								type='text'
-								name='name'
-								id='name'
-								ref={userRef}
-								autoComplete='off'
-								onChange={e => setUser(e.target.value)}
-								aria-invalid={validName ? 'false' : 'true'}
-								aria-describedby='uidnote'
-								onFocus={() => setUserFocus(true)}
-								onBlur={() => setUserFocus(false)}
-								placeholder='First and last name'
-								className='form__input'
-								required
+						{inputs.map(input => (
+							<FormInput
+								key={input.id}
+								{...input}
+								value={values[input.name]}
+								onChange={onChange}
 							/>
-
-							<span
-								id='uidnote'
-								className={
-									userFocus && user && !validName ? 'instructions' : 'offscreen'
-								}>
-								Characters in the range (Aa - Zz)
-								<br />
-								Must contain a space ( )
-								<br />
-								Numbers, underscores, hyphens don't allowed
-							</span>
-						</p>
-						<p className='form__group'>
-							<label htmlFor='email'>
-								Email
-								<span
-									className={
-										validEmail ? 'form__icon form__icon--valid' : 'hide'
-									}>
-									<AiFillCheckCircle />
-								</span>
-								<span
-									className={
-										validEmail || !email
-											? 'hide'
-											: 'form__icon form__icon--invalid'
-									}>
-									<FaTimesCircle />
-								</span>
-							</label>
-							<input
-								type='email'
-								name='email'
-								id='email'
-								autoComplete='off'
-								onChange={e => setEmail(e.target.value)}
-								aria-invalid={validEmail ? 'false' : 'true'}
-								aria-describedby='emailnote'
-								onFocus={() => setEmailFocus(true)}
-								onBlur={() => setEmailFocus(false)}
-								placeholder='example@gmail.com'
-								className='form__input'
-								required
-							/>
-
-							<span
-								id='emailnote'
-								className={
-									emailFocus && email && !validEmail
-										? 'instructions'
-										: 'offscreen'
-								}>
-								Uppercase (A-Z) and lowercase (a-z) English letters
-								<br />
-								Digits (0-9).
-								<br />
-								Characters ! # $ % & ' * + - / = ? ^ _ ` allowed
-							</span>
-						</p>
-						<p className='form__group'>
-							<label htmlFor='password'>
-								Password
-								<span
-									className={
-										validPwd ? 'form__icon form__icon--valid' : 'hide'
-									}>
-									<AiFillCheckCircle />
-								</span>
-								<span
-									className={
-										validPwd || !pwd ? 'hide' : 'form__icon form__icon--invalid'
-									}>
-									<FaTimesCircle />
-								</span>
-							</label>
-							<input
-								type='password'
-								name='password'
-								id='password'
-								onChange={e => setPwd(e.target.value)}
-								value={pwd}
-								placeholder='At least 6 characters'
-								className='form__input'
-								aria-invalid={validPwd ? 'false' : 'true'}
-								aria-describedby='pwdnote'
-								onFocus={() => setPwdFocus(true)}
-								onBlur={() => setPwdFocus(false)}
-								required
-							/>
-							<span
-								id='pwdnote'
-								className={
-									pwdFocus && !validPwd ? 'instructions' : 'offscreen'
-								}>
-								Must contain at least 6 characters
-								<br />
-								Must include uppercase and lowercase letters, a number and a
-								special character.
-								<br />
-								Allowed special characters:{' '}
-								<span aria-label='exclamation mark'>!</span>{' '}
-								<span aria-label='at symbol'>@</span>{' '}
-								<span aria-label='hashtag'>#</span>{' '}
-								<span aria-label='dollar sign'>$</span>{' '}
-								<span aria-label='percent'>%</span>
-							</span>
-						</p>
-						<p className='form__group'>
-							<label htmlFor='re-password'>
-								Re-enter password
-								<span
-									className={
-										validMatch && matchPwd
-											? 'form__icon form__icon--valid'
-											: 'hide'
-									}>
-									<AiFillCheckCircle />
-								</span>
-								<span
-									className={
-										validMatch || !matchPwd
-											? 'hide'
-											: 'form__icon form__icon--invalid'
-									}>
-									<FaTimesCircle />
-								</span>
-							</label>
-							<input
-								type='password'
-								name='re-password'
-								id='re-password'
-								value={matchPwd}
-								className='form__input'
-								onChange={e => setMatchPwd(e.target.value)}
-								aria-invalid={validMatch ? 'false' : 'true'}
-								aria-describedby='confirmnote'
-								onFocus={() => setMatchFocus(true)}
-								onBlur={() => setMatchFocus(false)}
-								required
-							/>
-							<span
-								id='confirmnote'
-								className={
-									matchFocus && !validMatch ? 'instructions' : 'offscreen'
-								}>
-								Must match the first password input field.
-							</span>
-						</p>
+						))}
 						<p className='form__group'>
 							<label htmlFor='role'>Role</label>
 							<select
@@ -336,10 +186,7 @@ const UserAdd = () => {
 							</select>
 						</p>
 						<p className='form__group form__group--mt'>
-							<Btn
-								type='Submit'
-								utility='width-full'
-								disabled={!(validName && validEmail && validPwd && validMatch)}>
+							<Btn type='Submit' utility='width-full'>
 								Add
 							</Btn>
 						</p>

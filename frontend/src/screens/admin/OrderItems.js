@@ -29,15 +29,11 @@ const OrderItems = () => {
 	const [isSuccess, setIsSuccess] = useState(false);
 	const [isFailure, setIsFailure] = useState(false);
 
-	const { hasError, isLoading, order } = useSelector(
-		state => state.orderDetails
+	const { isLoading, order } = useSelector(state => state.orderDetails);
+
+	const { loading, success: successDeliver } = useSelector(
+		state => state.orderDeliver
 	);
-
-	const {
-		loading,
-		success: successDeliver,
-	} = useSelector(state => state.orderDeliver);
-
 
 	const [success, setSuccess] = useState(false);
 
@@ -47,7 +43,7 @@ const OrderItems = () => {
 
 		try {
 			const { data } = await axios.patch(
-				`http://localhost:5000/api/orders/${id}/deliver`,
+				`/api/orders/${id}/deliver`,
 				{
 					isDelivered: true,
 					deliveredAt: Date.now(),
@@ -145,10 +141,7 @@ const OrderItems = () => {
 										{order.cartItems.map(item => (
 											<div key={item._id} className='cart-screen__mobile'>
 												<div className='cart-screen__img'>
-													<img
-														src={`http://localhost:5000/images/${item.image}`}
-														alt={item.name}
-													/>
+													<img src={`/images/${item.image}`} alt={item.name} />
 												</div>
 
 												<div className='cart-screen__info'>
@@ -183,7 +176,7 @@ const OrderItems = () => {
 														<td className='cart-screen__book-info'>
 															<div className='cart-screen__img'>
 																<img
-																	src={`http://localhost:5000/images/${item.image}`}
+																	src={`/images/${item.image}`}
 																	alt={item.name}
 																/>
 															</div>

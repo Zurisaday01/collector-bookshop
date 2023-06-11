@@ -6,7 +6,6 @@ import axios from 'axios';
 import {
 	deleteStart,
 	deleteSuccess,
-	fetchUsers,
 	deleteFailure,
 	fetchReviews,
 } from '../../features/reviewSlice';
@@ -54,12 +53,9 @@ const ReviewsList = () => {
 
 		// axios delete
 		try {
-			const res = await axios.delete(
-				`http://localhost:5000/api/reviews/${id}`,
-				{
-					withCredentials: true,
-				}
-			);
+			const res = await axios.delete(`/api/reviews/${id}`, {
+				withCredentials: true,
+			});
 
 			dispatch(deleteSuccess());
 			// after deleting fetch the users again

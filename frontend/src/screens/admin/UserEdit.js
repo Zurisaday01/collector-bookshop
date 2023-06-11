@@ -52,7 +52,7 @@ const UserEdit = () => {
 
 		try {
 			const res = await axios.patch(
-				`http://localhost:5000/api/users/${id}`,
+				`/api/users/${id}`,
 				{
 					name: name,
 					email: email,

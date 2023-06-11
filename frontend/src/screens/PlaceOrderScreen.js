@@ -14,9 +14,7 @@ import useMediaQuery from '../hooks/useMediaQuery';
 
 const PlaceOrderScreen = () => {
 	const cart = useSelector(state => state.cart);
-	const { order, loading, error, success } = useSelector(
-		state => state.orderCreate
-	);
+	const { order, success } = useSelector(state => state.orderCreate);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
@@ -61,7 +59,7 @@ const PlaceOrderScreen = () => {
 	) => {
 		try {
 			const { data } = await axios.post(
-				'http://localhost:5000/api/orders',
+				'/api/orders',
 				{
 					orderItems: orderItems,
 					shippingAddress: shippingAddress,
@@ -119,10 +117,7 @@ const PlaceOrderScreen = () => {
 								{cart.cartItems.map(item => (
 									<div key={item._id} className='cart-screen__mobile'>
 										<div className='cart-screen__img'>
-											<img
-												src={`http://localhost:5000/images/${item.image}`}
-												alt={item.name}
-											/>
+											<img src={`/images/${item.image}`} alt={item.name} />
 										</div>
 
 										<div className='cart-screen__info'>
@@ -157,7 +152,7 @@ const PlaceOrderScreen = () => {
 												<td className='cart-screen__book-info'>
 													<div className='cart-screen__img'>
 														<img
-															src={`http://localhost:5000/images/${item.image}`}
+															src={`/images/${item.image}`}
 															alt={item.name}
 														/>
 													</div>

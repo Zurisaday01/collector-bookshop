@@ -10,7 +10,6 @@ import {
 	EffectCoverflow,
 	EffectCards,
 	Zoom,
-	Parallax,
 } from 'swiper';
 
 // redux

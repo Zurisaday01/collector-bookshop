@@ -35,10 +35,9 @@ const DropdownUser = ({
 		const getProfile = async () => {
 			try {
 				if (isPhotoUpdated) {
-					const { data } = await axios.get(
-						'http://localhost:5000/api/users/yourProfile',
-						{ withCredentials: true }
-					);
+					const { data } = await axios.get('/api/users/yourProfile', {
+						withCredentials: true,
+					});
 
 					setUserPhoto(data.data.user.photo);
 
@@ -50,11 +49,11 @@ const DropdownUser = ({
 		};
 
 		getProfile();
-	}, [isPhotoUpdated]);
+	}, [isPhotoUpdated, setIsPhotoUpdated]);
 
 	const logoutUser = async () => {
 		try {
-			const res = await axios.get('http://localhost:5000/api/users/logout', {
+			const res = await axios.get('/api/users/logout', {
 				withCredentials: true,
 			});
 
@@ -82,9 +81,7 @@ const DropdownUser = ({
 					<div className='dropdown-user__photo dropdown-user__photo--shadow'>
 						{!updating ? (
 							<img
-								src={`http://localhost:5000/images/${
-									isPhotoUpdated ? userPhoto : photo
-								}`}
+								src={`/images/${isPhotoUpdated ? userPhoto : photo}`}
 								alt={name}></img>
 						) : (
 							<PuffLoader
@@ -106,9 +103,7 @@ const DropdownUser = ({
 			) : (
 				<div className='dropdown-user__photo dropdown-user__photo--shadow'>
 					<img
-						src={`http://localhost:5000/images/${
-							isPhotoUpdated ? userPhoto : photo
-						}`}
+						src={`/images/${isPhotoUpdated ? userPhoto : photo}`}
 						alt={name}></img>
 				</div>
 			)}
@@ -120,9 +115,7 @@ const DropdownUser = ({
 							<div className='dropdown-user__user dropdown-user__option'>
 								<div className='dropdown-user__photo dropdown-user__photo--option'>
 									<img
-										src={`http://localhost:5000/images/${
-											isPhotoUpdated ? userPhoto : photo
-										}`}
+										src={`/images/${isPhotoUpdated ? userPhoto : photo}`}
 										alt={name}></img>
 								</div>
 								<span>{name}</span>

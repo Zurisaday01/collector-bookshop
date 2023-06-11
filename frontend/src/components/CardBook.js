@@ -10,10 +10,7 @@ const CardBook = ({ product }) => {
 						<span className='card__bestseller'>Best Seller</span>
 					) : null}
 					<div className='card__img'>
-						<img
-							src={`http://localhost:5000/images/${product.image}`}
-							alt={product.name}
-						/>
+						<img src={`/images/${product.image}`} alt={product.name} />
 					</div>
 
 					<div className='card__content'>

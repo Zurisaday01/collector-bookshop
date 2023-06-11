@@ -1,14 +1,11 @@
 import { createSlice, createAsyncThunk, current } from '@reduxjs/toolkit';
-import { REHYDRATE } from 'redux-persist';
 import axios from 'axios';
 
 export const fetchProductInCart = createAsyncThunk(
 	'fetchProductInCart',
 	async ({ id, qty }) => {
 		try {
-			const { data } = await axios.get(
-				`http://localhost:5000/api/products/${id}?qty=${qty}`
-			);
+			const { data } = await axios.get(`/api/products/${id}?qty=${qty}`);
 
 			const {
 				data: { product },

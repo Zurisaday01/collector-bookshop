@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import Sidebar from './Sidebar';
 import CardStats from './CardStats';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUsers } from '../../features/userSlice';

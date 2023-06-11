@@ -48,11 +48,7 @@ const ProductsList = () => {
 		state => state.productList
 	);
 
-	const {
-		success,
-		loading: loadingDelete,
-		error,
-	} = useSelector(state => state.productDelete);
+	const { loading: loadingDelete } = useSelector(state => state.productDelete);
 
 	useEffect(() => {
 		dispatch(fetchProducts());
@@ -63,12 +59,9 @@ const ProductsList = () => {
 		dispatch(deleteStart());
 		// axios delete
 		try {
-			const res = await axios.delete(
-				`http://localhost:5000/api/products/${id}`,
-				{
-					withCredentials: true,
-				}
-			);
+			const res = await axios.delete(`/api/products/${id}`, {
+				withCredentials: true,
+			});
 
 			dispatch(deleteSuccess());
 			// after deleting fetch the products again

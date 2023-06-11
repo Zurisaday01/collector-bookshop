@@ -80,7 +80,7 @@ const ProductScreen = () => {
 								) : null}
 								<div className='product-screen__image'>
 									<img
-										src={`http://localhost:5000/images/${product.data.product.image}`}
+										src={`/images/${product.data.product.image}`}
 										alt={product.data.product.name}></img>
 								</div>
 

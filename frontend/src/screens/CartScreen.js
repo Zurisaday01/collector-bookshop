@@ -70,10 +70,7 @@ const CartScreen = () => {
 								{cartItems.map(item => (
 									<div key={item._id} className='cart-screen__mobile'>
 										<div className='cart-screen__img'>
-											<img
-												src={`http://localhost:5000/images/${item.image}`}
-												alt={item.name}
-											/>
+											<img src={`/images/${item.image}`} alt={item.name} />
 										</div>
 
 										<div className='cart-screen__info'>
@@ -113,10 +110,7 @@ const CartScreen = () => {
 										<tr key={item._id} className='cart-screen__rows'>
 											<td className='cart-screen__book-info'>
 												<div className='cart-screen__img'>
-													<img
-														src={`http://localhost:5000/images/${item.image}`}
-														alt={item.name}
-													/>
+													<img src={`/images/${item.image}`} alt={item.name} />
 												</div>
 												<div className='cart-screen__info'>
 													<span

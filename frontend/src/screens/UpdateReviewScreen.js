@@ -46,7 +46,7 @@ const UpdateReviewScreen = () => {
 
 		try {
 			const res = await axios.patch(
-				`http://localhost:5000/api/reviews/${id}`,
+				`/api/reviews/${id}`,
 				{
 					rating: rating,
 					review: review.replace(/\n\n/g, '/n'),
