@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-const InputStepper = ({ value, changeQty }) => {
+const InputStepper = ({ value, changeQty, countInStock }) => {
 	const min = 1;
-	const max = 100;
+	const max = countInStock;
 
 	const incrementValue = () => {
 		if (value < max) {

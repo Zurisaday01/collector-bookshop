@@ -7,7 +7,6 @@ import AppError from './utils/appError.js';
 import globalErrorHandler from './controllers/errorController.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
-// const cors = require('cors');
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
@@ -18,6 +17,7 @@ import connectDB from './config/db.js';
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
 
 // routes
 dotenv.config();
@@ -36,12 +36,18 @@ app.use(
 );
 
 app.use(function (req, res, next) {
+	res.header(
+		'Access-Control-Allow-Methods',
+		'GET,PUT,POST,DELETE,UPDATE,OPTIONS'
+	);
 	res.header('Content-Type', 'application/json;charset=UTF-8');
 	res.header('Access-Control-Allow-Credentials', true);
 	res.header(
 		'Access-Control-Allow-Headers',
 		'Origin, X-Requested-With, Content-Type, Accept'
 	);
+	res.set('Cache-Control', 'no-store');
+
 	next();
 });
 
@@ -62,12 +68,15 @@ if (process.env.NODE_ENV === 'development') {
 	app.use(morgan('dev'));
 }
 
-// 300 request from the same IP in 1 hour
+// 300 request from the same IP in 1 hour = limit request from api
 const limiter = rateLimit({
 	max: 300,
 	window: 60 * 60 * 1000,
 	message: 'Too many requests from this IP, please try again in an hour',
 });
+
+// url parse update user
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 app.use('/api', limiter);
 
@@ -75,16 +84,21 @@ app.use(express.json());
 
 app.use(cookieParser());
 // test middleware
-// app.use((req, res, next) => {
-// 	// it's an object that contains cookies sent by request in JSON after parsing.
-// 	console.log(req.cookies);
-// 	next();
-// });
+app.use((req, res, next) => {
+	// it's an object that contains cookies sent by request in JSON after parsing.
+	console.log(req.cookies);
+	next();
+});
 
 // ROUTES
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/orders', orderRoutes);
+
+app.get('/api/config/paypal', (req, res) => {
+	res.send(process.env.PAYPAL_CLIENT_ID);
+});
 
 // affect all http requests
 app.all('*', (req, res, next) => {

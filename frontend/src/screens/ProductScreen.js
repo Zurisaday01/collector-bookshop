@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
+// custom hook
+import useMediaQuery from '../hooks/useMediaQuery';
+
 // redux
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProduct } from '../features/productSlice';
@@ -14,14 +17,18 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import InputStepper from '../components/InputStepper';
 import Rating from '../components/Rating';
+import Reviews from '../components/Reviews';
 
 const ProductScreen = () => {
 	const [qty, setQty] = useState(1);
 
 	const { id } = useParams();
 	const dispatch = useDispatch();
-	const productDetails = useSelector(state => state.productDetails);
-	const { product, isLoading, hasError } = productDetails;
+	const { product, isLoading, hasError } = useSelector(
+		state => state.productDetails
+	);
+
+	const isMobile = useMediaQuery('(max-width: 740px)');
 
 	useEffect(() => {
 		dispatch(fetchProduct(id));
@@ -53,6 +60,24 @@ const ProductScreen = () => {
 					<div>
 						<div className='product-screen__content'>
 							<div className='product-screen__left'>
+								{isMobile ? (
+									<div className='product-screen__heading u-mb-small u-mt-small'>
+										<h2 className='heading-secondary'>
+											{product.data.product.name}
+										</h2>
+										<span className='product-screen__author'>
+											By {product.data.product.author}
+										</span>
+										<div className='product-screen__stars'>
+											<Rating
+												ratingsAverage={product.data.product.ratingsAverage}
+											/>
+										</div>
+										<span className='product-screen__price'>
+											${product.data.product.price}
+										</span>
+									</div>
+								) : null}
 								<div className='product-screen__image'>
 									<img
 										src={`http://localhost:5000/images/${product.data.product.image}`}
@@ -81,7 +106,11 @@ const ProductScreen = () => {
 												<tr>
 													<td>Quantity</td>
 													<td className='product-screen__input'>
-														<InputStepper value={qty} changeQty={chageQty} />
+														<InputStepper
+															value={qty}
+															changeQty={chageQty}
+															countInStock={product.data.product.countInStock}
+														/>
 													</td>
 												</tr>
 											) : null}
@@ -89,8 +118,8 @@ const ProductScreen = () => {
 											<tr>
 												<td colSpan='2'>
 													<Btn
-														cartHandler={addToCartHandler}
-														utility='with-full'
+														handler={addToCartHandler}
+														utility='width-full'
 														disabled={product.data.product.countInStock === 0}>
 														Add to cart
 													</Btn>
@@ -101,22 +130,25 @@ const ProductScreen = () => {
 								</div>
 							</div>
 							<div className='product-screen__info'>
-								<div className='product-screen__heading'>
-									<h2 className='heading-secondary'>
-										{product.data.product.name}
-									</h2>
-									<span className='product-screen__author'>
-										By {product.data.product.author}
-									</span>
-									<div className='product-screen__stars'>
-										<Rating
-											ratingsAverage={product.data.product.ratingsAverage}
-										/>
+								{!isMobile ? (
+									<div className='product-screen__heading'>
+										<h2 className='heading-secondary'>
+											{product.data.product.name}
+										</h2>
+										<span className='product-screen__author'>
+											By {product.data.product.author}
+										</span>
+										<div className='product-screen__stars'>
+											<Rating
+												ratingsAverage={product.data.product.ratingsAverage}
+											/>
+										</div>
+										<span className='product-screen__price'>
+											${product.data.product.price}
+										</span>
 									</div>
-									<span className='product-screen__price'>
-										${product.data.product.price}
-									</span>
-								</div>
+								) : null}
+
 								<div className='product-screen__description'>
 									{product.data.product.description
 										.split('/n')
@@ -136,13 +168,7 @@ const ProductScreen = () => {
 						</div>
 
 						<div className='product-screen__reviews'>
-							<h2>Customer reviews</h2>
-
-							{product.data.product.reviews.map(review => {
-								<div>
-									<p>This is a review</p>;
-								</div>;
-							})}
+							<Reviews productId={id} />
 						</div>
 					</div>
 				) : null}

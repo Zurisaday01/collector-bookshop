@@ -6,10 +6,32 @@
 	cursor: pointer;
 	color: var(--color-dark);
 	transition: all 0.3s;
+	position: relative;
+
+	&__counter {
+		position: absolute;
+		top: -1rem;
+		left: 8px;
+		background-color: var(--color-primary);
+		font-size: 1rem;
+		display: inline-block;
+		line-height: 1;
+		border-radius: 100%;
+		width: 2rem;
+		height: 2rem;
+		color: #fff;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 
 	&:hover {
 		color: var(--color-secondary);
 	}
+}
+
+.basket-btn:hover .basket-btn__counter {
+	background-color: var(--color-dark);
 }
 
 .btn {
@@ -42,7 +64,7 @@
 	}
 }
 
-.with-full {
+.width-full {
 	width: 100%;
 	&:hover {
 		background-color: var(--color-secondary);

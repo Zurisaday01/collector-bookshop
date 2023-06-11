@@ -33,12 +33,9 @@ import 'swiper/css/scrollbar';
 
 const CarouselBooks = () => {
 	const dispatch = useDispatch();
-	const productList = useSelector(state => state.productList);
-	const {
-		products: { products },
-		isLoading,
-		hasError,
-	} = productList;
+	const { products, isLoading, hasError } = useSelector(
+		state => state.productList
+	);
 
 	let bestsellerProducts = [];
 	for (const key in products) {
@@ -71,6 +68,20 @@ const CarouselBooks = () => {
 							Zoom,
 						]}
 						slidesPerView={4}
+						breakpoints={{
+							300: {
+								slidesPerView: 1,
+							},
+							550: {
+								slidesPerView: 2,
+							},
+							880: {
+								slidesPerView: 3,
+							},
+							1200: {
+								slidesPerView: 4,
+							},
+						}}
 						navigation
 						pagination={{ clickable: true }}
 						scrollbar={{ draggable: true }}>

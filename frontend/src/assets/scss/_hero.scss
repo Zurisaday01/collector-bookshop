@@ -17,6 +17,15 @@
 	align-items: center;
 
 	&__main {
-		// align-self: start;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+		align-items: start;
+	}
+
+	@media (max-width: $bp-medium) {
+		flex-direction: column;
+		justify-content: center;
+		height: 90vh;
 	}
 }

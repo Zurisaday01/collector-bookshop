@@ -3,10 +3,16 @@
 	h2 {
 		margin-bottom: 2rem;
 	}
+
+	@media (max-width: $bp-medium) {
+		h2 {
+			text-align: center;
+		}
+	}
 	&__main {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: space-between;
-		gap: 2.5rem;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+		gap: 2rem;
+		justify-items: center;
 	}
 }

@@ -4,7 +4,7 @@ import crypto from 'crypto';
 import User from '../models/userModel.js';
 import catchAsync from '../utils/catchAsync.js';
 import AppError from '../utils/appError.js';
-import sendEmail from '../utils/email.js';
+import { Email } from '../utils/email.js';
 
 const signToken = id => {
 	return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -23,8 +23,6 @@ const createSendToken = (user, statusCode, res) => {
 		httpOnly: true,
 	});
 
-	res.cookie('cookieName', 'cookieValue');
-
 	// remove password from output
 	user.password = undefined;
 
@@ -38,6 +36,7 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 export const signup = catchAsync(async (req, res, next) => {
+	// res.setHeader('Access-Control-Allow-Origin', '*');
 	// the user cannot register as a admin
 	const newUser = await User.create({
 		name: req.body.name,
@@ -46,14 +45,13 @@ export const signup = catchAsync(async (req, res, next) => {
 		password: req.body.password,
 		passwordConfirm: req.body.passwordConfirm,
 		role: req.body.role,
+		active: req.body.active,
 		passwordChangedAt: req.body.passwordChangedAt,
 		passwordResetToken: req.body.passwordResetToken,
 		passwordResetExpires: req.body.passwordResetExpires,
 	});
 
 	createSendToken(newUser, 201, res);
-
-	console.log('cookies', req.cookies);
 });
 
 export const signin = catchAsync(async (req, res, next) => {
@@ -75,6 +73,15 @@ export const signin = catchAsync(async (req, res, next) => {
 	// 3. if everything is ok, send token to client
 	createSendToken(user, 200, res);
 });
+
+export const logout = (req, res) => {
+	// sending an almost expired cookie
+	res.cookie('jwt', 'loggedout', {
+		expires: new Date(Date.now() + 10 * 1000),
+		httpOnly: true,
+	});
+	res.status(200).json({ status: 'success' });
+};
 
 export const protect = catchAsync(async (req, res, next) => {
 	// Getting token and check whether it's there
@@ -145,21 +152,16 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
 
 	// generate the random rest token
 	const resetToken = user.createPasswordResetToken();
-	await user.save({ validateBeforeSave: false }); // desactivate validation
-
-	// send token to user's email
-	const resetURL = `${req.protocol}://${req.get(
-		'host'
-	)}/api/users/resetPassword/${resetToken}`;
-
-	const message = `Forgot your password?\nSubmit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
+	await user.save({ validateBeforeSave: false }); // desactivate validation of required data in the schema
 
 	try {
-		await sendEmail({
-			email: user.email,
-			subject: 'Your password reset token (valid for 10 min)',
-			message,
-		});
+		// send token to user's email
+		// const resetURL = `${req.protocol}://${req.get(
+		// 	'host'
+		// )}/api/users/resetPassword/${resetToken}`;
+		const resetURL = `http://localhost:3000/resetPassword/${resetToken}`;
+
+		await new Email(user, resetURL).sendPasswordReset();
 
 		res.status(200).json({
 			status: 'success',
@@ -193,6 +195,7 @@ export const resetPassword = catchAsync(async (req, res, next) => {
 		passwordResetExpires: { $gt: Date.now() },
 	});
 
+	// if token has not expired, and there is userm set new password
 	if (!user) {
 		return next(new AppError('Token is invalid or has expired', 400));
 	}
@@ -206,7 +209,7 @@ export const resetPassword = catchAsync(async (req, res, next) => {
 	// have active the validator
 	await user.save();
 
-	// send new token
+	// send new token to log the user in
 	createSendToken(user, 200, res);
 });
 

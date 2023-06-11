@@ -1,32 +1,20 @@
 import React from 'react';
 
-const SidebarCategories = ({ getCategory }) => {
-	const categories = [
-		'All books',
-		'Fantasy',
-		'Fiction',
-		'Romance',
-		'Mystery',
-		'Thriller',
-		'Contemporary',
-		'Historical Fiction',
-		'Sports',
-		'Non-fiction',
-	];
-
-	const handlerOption = e => {
+const SidebarCategories = ({ categoriesOptions, getCategory, setSearch }) => {
+	const handleOption = e => {
 		getCategory(e.target.textContent);
+		setSearch('');
 	};
 
 	return (
 		<aside className='sidebar-categories'>
 			<h3>Categories</h3>
 			<div className='sidebar-categories__container'>
-				{categories.map((category, idx) => (
+				{categoriesOptions.map((category, idx) => (
 					<span
 						className='sidebar-categories__option'
 						key={idx}
-						onClick={handlerOption}>
+						onClick={handleOption}>
 						{category}
 					</span>
 				))}

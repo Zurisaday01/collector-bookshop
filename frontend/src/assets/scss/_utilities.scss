@@ -1,0 +1,46 @@
+// utility
+.u-no-border {
+	border: none !important;
+}
+
+.u-no-padding {
+	padding: 0 !important;
+}
+
+.u-flex-gap {
+	display: flex;
+	flex-direction: column;
+	gap: 1.7rem;
+}
+
+.u-flex-row {
+	display: flex !important;
+	flex-direction: row !important;
+	gap: 1rem;
+}
+
+.u-align-start {
+	align-self: start;
+}
+
+.u-mb-small {
+	margin-bottom: 2rem !important;
+}
+
+.u-mt-small {
+	margin-top: 2rem !important;
+}
+
+.u-margin-left-none {
+	margin-left: 0 !important;
+}
+
+.u-flex-column {
+	display: flex !important;
+	flex-direction: column !important;
+}
+
+.u-text-decoration-none {
+	text-decoration: none !important;
+	color: currentColor;
+}

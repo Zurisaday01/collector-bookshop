@@ -54,7 +54,6 @@ const userSchema = mongoose.Schema({
 
 // middlewares
 userSchema.pre('save', function (next) {
-	// if you haven't modified the password or is a new user, go to the next middleware and don't apply the logic
 	if (!this.isModified('password') || this.isNew) return next();
 
 	// there is a little delay
@@ -64,7 +63,7 @@ userSchema.pre('save', function (next) {
 });
 
 userSchema.pre('save', async function (next) {
-	// if password was modified
+	// Only run this function if password was actually modified
 	if (!this.isModified('password')) return next();
 
 	this.password = await bcrypt.hash(this.password, 12);
@@ -97,7 +96,6 @@ userSchema.methods.changedPasswordAfterUserCreated = function (tokenTimestamp) {
 			10
 		);
 
-
 		return changedTimestamp > tokenTimestamp;
 	}
 
@@ -113,7 +111,7 @@ userSchema.methods.createPasswordResetToken = function () {
 		.update(resetToken)
 		.digest('hex');
 
-	// milliseconds
+	// 10 minutes to change the password
 	this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
 
 	return resetToken;

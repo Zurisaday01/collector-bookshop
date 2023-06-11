@@ -16,7 +16,7 @@ export const fetchProductInCart = createAsyncThunk(
 
 			return { ...product, qty };
 		} catch (error) {
-			console.error(error);
+			console.error(error.message);
 		}
 	}
 );
@@ -25,10 +25,15 @@ export const cartReducer = createSlice({
 	name: 'cart',
 	initialState: {
 		cartItems: [],
+		loading: false,
+		shippingAddress: null,
+		paymentMethod: null,
+		order: null,
 	},
 	extraReducers: builder => {
 		builder
 			.addCase(fetchProductInCart.pending, state => {
+				state.loading = true;
 				if (!state.cartItems) {
 					state.cartItems = [];
 				} else {
@@ -37,6 +42,8 @@ export const cartReducer = createSlice({
 			})
 			.addCase(fetchProductInCart.fulfilled, (state, action) => {
 				// console.log(current(state));
+				state.loading = false;
+
 				const item = action.payload;
 				// is the item already exits in the cart
 				const existItem = state.cartItems.find(x => x._id === item._id);
@@ -66,10 +73,35 @@ export const cartReducer = createSlice({
 			);
 			state.cartItems = removeItem;
 		},
+		getShippingAddress: (state, action) => {
+			state.shippingAddress = action.payload;
+		},
+		getPaymentMethod: (state, action) => {
+			state.paymentMethod = action.payload;
+		},
+		getOrderSumary: (state, action) => {
+			state.order = action.payload;
+		},
+		cartReset: state => {
+			state.cartItems = [];
+			state.shippingAddress = null;
+			state.paymentMethod = null;
+			state.order = null;
+		},
+		cartClean: state => {
+			state.cartItems = [];
+		},
 	},
 });
 
-export const { removeFromCart } = cartReducer.actions;
+export const {
+	removeFromCart,
+	getShippingAddress,
+	getPaymentMethod,
+	getOrderSumary,
+	cartReset,
+	cartClean,
+} = cartReducer.actions;
 
 // const initialState = () => ({
 // 	cartItems: [],

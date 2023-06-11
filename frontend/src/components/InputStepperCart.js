@@ -8,17 +8,10 @@ const InputStepperCart = ({ value, id }) => {
 	const max = 100;
 
 	const dispatch = useDispatch();
-	// const cart = useSelector(state => state.cart);
-	// const { cartItems } = cart;
-
-	// const qtyCurrentBook = cartItems.find(book => book._id === id);
+	
 	const [qty, changeQty] = useState(value);
 
-	// if (qty !== value) {
-	// 	changeQty(value);
-	// } else {
-	// 	console.log(qty, value);
-	// }
+	
 
 	const incrementValue = () => {
 		if (qty < max) {

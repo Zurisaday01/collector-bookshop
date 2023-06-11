@@ -1,0 +1,30 @@
+.form-input {
+	display: flex;
+	flex-direction: column;
+
+	&--crud {
+		width: 80%;
+	}
+
+	&--mt {
+		margin-top: 1.5rem;
+	}
+
+	&--check {
+		flex-direction: row-reverse;
+		align-self: start;
+		gap: 1rem;
+	}
+
+	&__input {
+		padding: 1rem;
+		border: 2px solid var(--color-grey-light);
+		outline: none;
+		font-family: var(--font-body);
+
+		&::placeholder {
+			font-family: var(--font-body);
+			color: var(--color-grey);
+		}
+	}
+}

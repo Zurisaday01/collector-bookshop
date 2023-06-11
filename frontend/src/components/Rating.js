@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import StarsRating from 'react-star-rate';
 
 const Rating = ({ ratingsAverage }) => {

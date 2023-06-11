@@ -2,6 +2,15 @@
 	position: relative;
 	width: 50%;
 	height: 100%;
+	@media (max-width: $bp-medium) {
+		height: 50rem;
+		width: 90%;
+	}
+	@media (max-width: $bp-smallest) {
+		height: 40rem;
+		width: 100%;
+	}
+
 	&__img {
 		width: 18rem;
 		position: absolute;
@@ -11,6 +20,10 @@
 		// animation
 		outline-offset: 1.3rem;
 		transition: all 0.6s;
+
+		@media (max-width: $bp-smallest) {
+			width: 15rem;
+		}
 
 		&:hover {
 			z-index: 4;

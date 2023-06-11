@@ -17,13 +17,13 @@ import { protect, restrictTo } from '../controllers/authController.js';
 // POST /reviews
 router
 	.route('/')
-	.get(protect, getAllReviews)
+	.get(protect, restrictTo('admin'), getAllReviews)
 	.post(protect, restrictTo('user'), createReview);
 
 router
 	.route('/:id')
 	.get(getReview)
-	.patch(protect, updateReview)
-	.delete(protect, deleteReview);
+	.patch(protect, restrictTo('user'), updateReview)
+	.delete(protect, restrictTo('admin'), deleteReview);
 
 export default router;

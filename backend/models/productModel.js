@@ -10,7 +10,7 @@ const productSchema = mongoose.Schema(
 		},
 		image: {
 			type: String,
-			required: [true, 'A product must have an image'],
+			default: 'no-image.png',
 		},
 		author: {
 			type: String,
@@ -41,9 +41,8 @@ const productSchema = mongoose.Schema(
 			type: Number,
 			default: 0,
 		},
-		numReviews: {
+		reviewsQuantity: {
 			type: Number,
-			required: true,
 			default: 0,
 		},
 		price: {

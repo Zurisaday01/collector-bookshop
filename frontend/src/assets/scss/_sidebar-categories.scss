@@ -1,25 +1,43 @@
 .sidebar-categories {
 	border: 2px solid #e7e7e7;
-
 	min-width: 20rem;
-	padding: 2rem;
 	align-self: start;
+	padding: 3rem 0;
+	@media (max-width: $bp-medium) {
+		width: 100%;
+	}
 
 	h3 {
+		padding-left: 2rem;
 		margin-bottom: 2.5rem;
 	}
 
 	&__container {
 		display: flex;
 		flex-direction: column;
-		gap: 2rem;
+		@media (max-width: $bp-medium) {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+			gap: 2rem;
+			align-items: center;
+
+			span {
+				text-align: center;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				padding: 1rem;
+			}
+		}
 	}
 
 	&__option {
 		cursor: pointer;
+		padding: 0 2rem;
 		transition: all 0.2s;
 		&:hover {
-			color: var(--color-primary);
+			color: #fff;
+			background-color: var(--color-dark);
 		}
 	}
 }

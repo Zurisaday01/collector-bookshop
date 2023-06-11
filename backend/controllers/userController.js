@@ -1,20 +1,9 @@
-import User from '../models/userModel.js';
 import AppError from '../utils/appError.js';
 import catchAsync from '../utils/catchAsync.js';
 import multer from 'multer';
 import sharp from 'sharp';
 
-// const multerStorage = multer.diskStorage({
-// 	destination: (req, file, cb) => {
-// 		// in case of error = return null
-// 		cb(null, 'assets/img/users');
-// 	},
-// 	filename: (req, file, cb) => {
-// 		const ext = file.mimetype.split('/')[1];
-// 		cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
-// 		// user-af31s145f3452yud2b === user id = relation user/photo
-// 	},
-// });
+import User from '../models/userModel.js';
 
 const multerStorage = multer.memoryStorage();
 
@@ -76,6 +65,7 @@ export const updateUserProfile = catchAsync(async (req, res, next) => {
 
 	// filter the req.body {}, to return req.body{'name', 'email'}
 	const filteredBody = filterObj(req.body, 'name', 'email');
+
 	if (req.file) filteredBody.photo = req.file.filename;
 	const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
 		new: true,
@@ -90,7 +80,9 @@ export const updateUserProfile = catchAsync(async (req, res, next) => {
 	});
 });
 
-// we are not deleting users, we are marking them as inactive
+// @desc	We are not deleting users, we are marking them as inactive
+// @route	POST /api/users
+// @access	Public/User
 export const deleteUserProfile = catchAsync(async (req, res, next) => {
 	await User.findByIdAndUpdate(req.user.id, { active: false });
 
@@ -102,6 +94,7 @@ export const deleteUserProfile = catchAsync(async (req, res, next) => {
 
 // @desc    Get all users
 // @route	GET /api/users
+// @access	Private/Admin
 export const getAllUsers = catchAsync(async (req, res, next) => {
 	const users = await User.find({});
 
@@ -132,6 +125,7 @@ export const getUser = catchAsync(async (req, res, next) => {
 
 // @desc    Register a new user
 // @route	POST /api/users
+// @access	Public/User
 export const registerUser = catchAsync(async (req, res, next) => {
 	const newUser = await User.create(req.body);
 
@@ -144,7 +138,7 @@ export const registerUser = catchAsync(async (req, res, next) => {
 });
 
 // @desc    Update user
-// @route	PUT /api/users:id
+// @route	PATCH /api/users:id
 export const updateUser = catchAsync(async (req, res, next) => {
 	const user = await User.findByIdAndUpdate(req.params.id, req.body, {
 		new: true,
@@ -165,6 +159,7 @@ export const updateUser = catchAsync(async (req, res, next) => {
 
 // @desc    Delete user
 // @route	DELETE /api/users/:id
+// @access	Private/Admin
 export const deleteUser = catchAsync(async (req, res, next) => {
 	const user = await User.findByIdAndDelete(req.params.id);
 
@@ -175,5 +170,30 @@ export const deleteUser = catchAsync(async (req, res, next) => {
 	res.status(204).json({
 		status: 'success',
 		data: null,
+	});
+});
+
+// @desc    Create user
+// @route	POST /api/users/
+// @access	Private/Admin
+export const createUser = catchAsync(async (req, res, next) => {
+	const newUser = await User.create({
+		name: req.body.name,
+		email: req.body.email,
+		photo: req.body.photo,
+		password: req.body.password,
+		passwordConfirm: req.body.passwordConfirm,
+		role: req.body.role,
+		active: req.body.active,
+		passwordChangedAt: req.body.passwordChangedAt,
+		passwordResetToken: req.body.passwordResetToken,
+		passwordResetExpires: req.body.passwordResetExpires,
+	});
+
+	res.status(201).json({
+		status: 'success',
+		data: {
+			user: newUser,
+		},
 	});
 });

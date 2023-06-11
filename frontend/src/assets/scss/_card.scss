@@ -35,6 +35,7 @@
 		cursor: pointer;
 		transition: all 0.2s;
 		height: 49rem;
+		// width: 30rem;
 		position: relative;
 
 		&:hover {
@@ -183,4 +184,49 @@
 
 .card-category:hover .card-category__icon {
 	color: #00f8f4;
+}
+
+.card-stats {
+	box-shadow: 0px 3px 30px -3px rgba(0, 0, 0, 0.12);
+	flex: 1;
+	min-width: 20rem;
+	padding: 1rem;
+	display: flex;
+	flex-direction: column;
+
+	&__stats {
+		font-family: 'Tajawal', sans-serif;
+		font-size: 3rem;
+	}
+
+	&__icon {
+		padding: 5px;
+		border: none;
+		font-size: 2rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		align-self: end;
+		border-radius: 3px;
+
+		&--users {
+			background-color: rgba(#00d9ff, 0.3);
+			color: #006276;
+		}
+
+		&--products {
+			background-color: rgba(#b700ff, 0.3);
+			color: #550076;
+		}
+
+		&--orders {
+			background-color: rgba(#ffb300, 0.3);
+			color: #896104;
+		}
+
+		&--earnings {
+			background-color: rgba(#0ec501, 0.3);
+			color: #076700;
+		}
+	}
 }

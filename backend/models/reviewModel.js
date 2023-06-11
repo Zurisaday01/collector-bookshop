@@ -13,7 +13,7 @@ const reviewSchema = mongoose.Schema(
 		user: {
 			type: mongoose.Schema.ObjectId,
 			ref: 'User',
-			required: [true, 'Review muct belong to a user'],
+			required: [true, 'Review must belong to a user'],
 		},
 		rating: {
 			type: Number,
@@ -39,9 +39,40 @@ reviewSchema.pre(/^find/, function (next) {
 	this.populate({
 		path: 'user',
 		select: 'name photo',
+	}).populate({
+		path: 'product',
+		select: 'name',
 	});
+
 	next();
 });
+
+reviewSchema.statics.calcReviewsQuantity = async function (productId) {
+	const stats = await this.aggregate([
+		{
+			$match: {
+				product: productId,
+			},
+		},
+		{
+			$group: {
+				_id: '$product',
+				nReviews: { $sum: 1 },
+			},
+		},
+	]);
+
+	if (stats.length > 0) {
+		await Product.findByIdAndUpdate(productId, {
+			reviewsQuantity: stats[0].nReviews,
+		});
+	} else {
+		await Product.findByIdAndUpdate(productId),
+			{
+				reviewsQuantity: 0,
+			};
+	}
+};
 
 reviewSchema.statics.calcAverageRatings = async function (productId) {
 	const stats = await this.aggregate([
@@ -56,8 +87,6 @@ reviewSchema.statics.calcAverageRatings = async function (productId) {
 			},
 		},
 	]);
-
-	console.log(stats);
 
 	if (stats.length > 0) {
 		await Product.findByIdAndUpdate(productId, {
@@ -74,8 +103,8 @@ reviewSchema.statics.calcAverageRatings = async function (productId) {
 };
 
 reviewSchema.post('save', function () {
-	console.log(this.product);
 	this.constructor.calcAverageRatings(this.product);
+	this.constructor.calcReviewsQuantity(this.product);
 });
 
 // findByIdAndUpdate
@@ -88,6 +117,7 @@ reviewSchema.pre(/^findOneAnd/, async function (next) {
 
 reviewSchema.post(/^findOneAnd/, async function () {
 	await this.review.constructor.calcAverageRatings(this.review.product);
+	await this.review.constructor.calcReviewsQuantity(this.product);
 });
 
 const Review = mongoose.model('Review', reviewSchema);

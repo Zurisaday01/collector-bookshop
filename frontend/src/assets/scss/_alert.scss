@@ -1,0 +1,63 @@
+.alert {
+	position: fixed;
+	padding: 1rem;
+
+	&--success {
+		background-color: #5aff83;
+		border: 2px solid #005916;
+		color: #005916;
+	}
+	&--fail {
+		background-color: #df0404;
+		border: 2px solid #6a0000;
+		color: #ffffff;
+	}
+
+	// screens
+	&--profile {
+		right: 4rem;
+		bottom: 13rem;
+	}
+
+	&--admin {
+		right: 4rem;
+		bottom: 18rem;
+	}
+
+	&--user {
+		right: 4rem;
+		bottom: 18rem;
+	}
+
+	&--add {
+		right: 4rem;
+		bottom: 14rem;
+	}
+
+	// utility
+	&--hide {
+		display: none;
+	}
+}
+
+.message {
+	&--alert {
+		background-color: #df0404;
+		color: #fff;
+		padding: 1rem;
+	}
+
+	&--primary {
+		background-color: var(--color-primary);
+		padding: 1rem;
+		color: #fff;
+		border-radius: 3px;
+		justify-self: stretch;
+	}
+
+	&--success {
+		background-color: #028f25;
+		color: #fff;
+		padding: 1rem;
+	}
+}

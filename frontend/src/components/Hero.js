@@ -6,13 +6,16 @@ import Hero1 from '../assets/img/hero-1.png';
 import Hero2 from '../assets/img/hero-2.png';
 import Hero3 from '../assets/img/hero-3.png';
 
-const Hero = () => {
+const Hero = ({ setSelectedCategory }) => {
 	return (
 		<div className='hero container'>
 			<div className='hero__main'>
 				<span className='min-heading'>Welcome to this bookstore</span>
 				<h1 className='heading-primary'>Find your books here</h1>
-				<Link className='btn' to='/shop'>
+				<Link
+					className='btn'
+					to='/shop'
+					onClick={() => setSelectedCategory('All books')}>
 					Shop Now
 				</Link>
 			</div>

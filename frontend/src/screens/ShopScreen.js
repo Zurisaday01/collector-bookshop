@@ -9,24 +9,22 @@ import CardBook from '../components/CardBook';
 import SidebarCategories from '../components/SidebarCategories';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
+import SearchInput from '../components/SearchInput';
 
-const ShopScreen = () => {
+const ShopScreen = ({
+	categoriesOptions,
+	selectedCategory,
+	setSelectedCategory,
+}) => {
 	const dispatch = useDispatch();
-	const productList = useSelector(state => state.productList);
+	const { products, isLoading, hasError } = useSelector(
+		state => state.productList
+	);
 
-	console.log(productList);
-	const {
-		products: { products },
-		isLoading,
-		hasError,
-	} = productList;
-
-	const [selectedCategory, setSelectedCategory] = useState();
+	const [search, setSearch] = useState('');
 
 	let filteredProducts = [];
-	if (!selectedCategory) {
-		console.log('All products');
-	} else {
+	if (selectedCategory && products) {
 		filteredProducts = products.filter(item =>
 			item.category.includes(selectedCategory)
 		);
@@ -36,48 +34,75 @@ const ShopScreen = () => {
 		dispatch(fetchProducts());
 	}, [dispatch]);
 
+	const productsSearchedByName = products.filter(product =>
+		product.name.toLowerCase().includes(search.toLowerCase().trim())
+	);
+
 	return (
 		<div className='shop-screen'>
 			<div className='shop-screen__container'>
-				<SidebarCategories getCategory={setSelectedCategory} />
-
-				<div
-					className={`shop-screen__books ${
-						products
-							? filteredProducts.length !== 0 ||
-							  !selectedCategory ||
-							  selectedCategory === 'All books'
-								? 'shop-screen--products'
-								: 'shop-screen--noproducts'
-							: ''
-					}`}>
-					{isLoading ? (
-						<Loader />
-					) : // <h2>Loading...</h2>
-					hasError ? (
-						<Message variant='alert'>Something went wrong</Message>
-					) : products ? (
-						!selectedCategory || selectedCategory === 'All books' ? (
-							products.map(
-								// eslint-disable-next-line no-unused-expressions
-								product => <CardBook key={product._id} product={product} />
-							)
-						) : products.filter(item =>
-								item.category.includes(selectedCategory)
-						  ).length === 0 ? (
-							<Message variant='primary'>
-								There are no books of this category
-							</Message>
-						) : (
+				<div>
+					<SidebarCategories
+						categoriesOptions={categoriesOptions}
+						getCategory={setSelectedCategory}
+						setSearch={setSearch}
+					/>
+					<SearchInput search={search} setSearch={setSearch} />
+				</div>
+				{!search ? (
+					<div
+						className={`shop-screen__books ${
 							products
-								.filter(item => item.category.includes(selectedCategory))
-								.map(
+								? filteredProducts.length !== 0 ||
+								  !selectedCategory ||
+								  selectedCategory === 'All books'
+									? 'shop-screen--products'
+									: 'shop-screen--noproducts'
+								: ''
+						}`}>
+						{isLoading ? (
+							<Loader />
+						) : hasError ? (
+							<Message variant='alert'>Something went wrong</Message>
+						) : products ? (
+							!selectedCategory || selectedCategory === 'All books' ? (
+								products.map(
 									// eslint-disable-next-line no-unused-expressions
 									product => <CardBook key={product._id} product={product} />
 								)
-						)
-					) : null}
-				</div>
+							) : products.filter(item =>
+									item.category.includes(selectedCategory)
+							  ).length === 0 ? (
+								<Message variant='primary'>
+									There are no books of this category
+								</Message>
+							) : (
+								products
+									.filter(item => item.category.includes(selectedCategory))
+									.map(
+										// eslint-disable-next-line no-unused-expressions
+										product => <CardBook key={product._id} product={product} />
+									)
+							)
+						) : null}
+					</div>
+				) : (
+					<div
+						className={`shop-screen__books ${
+							productsSearchedByName.length !== 0
+								? 'shop-screen--products'
+								: 'shop-screen--noproducts'
+						}`}>
+						{productsSearchedByName.length === 0 ? (
+							<Message variant='primary'>No results</Message>
+						) : (
+							productsSearchedByName.map(
+								// eslint-disable-next-line no-unused-expressions
+								product => <CardBook key={product._id} product={product} />
+							)
+						)}
+					</div>
+				)}
 			</div>
 		</div>
 	);

@@ -7,6 +7,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProductInCart } from '../features/cartSlice';
 
+// custom hooks
+import useMediaQuery from '../hooks/useMediaQuery';
+
 // reducer action
 import { removeFromCart } from '../features/cartSlice';
 
@@ -22,13 +25,16 @@ const CartScreen = () => {
 	const { id } = useParams();
 	let location = useLocation();
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	const qty = location.search ? Number(location.search.split('=')[1]) : 1;
 
-	const dispatch = useDispatch();
-
 	const cart = useSelector(state => state.cart);
+	const user = useSelector(state => state.user);
+
 	const { cartItems } = cart;
+
+	const isMobile = useMediaQuery('(max-width: 600px)');
 
 	let subtotal = 0;
 	cartItems.forEach(item => {
@@ -37,27 +43,63 @@ const CartScreen = () => {
 	});
 
 	useEffect(() => {
-		dispatch(fetchProductInCart({ id, qty }));
+		if (!cartItems.length === 0) {
+			dispatch(fetchProductInCart({ id, qty }));
+		}
 	}, [dispatch, id, qty]);
 
-	// return (
-	// 	<button className='quick' onClick={() => dispatch(reset())}>
-	// 		Reset
-	// 	</button>
-	// );
+	const onCheckout = () => {
+		if (user.currentUser) navigate('/shipping');
+
+		if (!user.currentUser) navigate('/signin');
+	};
 
 	return (
 		<div className='cart-screen'>
 			<div className='content cart-screen__content'>
 				<div className='cart-screen__main'>
-					{cartItems.length === 0 ? (
-						<Message variant='primary'>The cart is empty</Message>
-					) : (
-						<div>
-							<h2>
-								Shoping Cart:{' '}
-								{cartItems.reduce((acc, item) => acc + item.qty, 0)} books
-							</h2>
+					<div>
+						<h1 className='heading-secondary u-mb-s'>
+							Shoping Cart: {cartItems.reduce((acc, item) => acc + item.qty, 0)}{' '}
+							books
+						</h1>
+						{cartItems.length === 0 ? (
+							<Message variant='primary'>The cart is empty</Message>
+						) : isMobile ? (
+							<div>
+								{cartItems.map(item => (
+									<div key={item._id} className='cart-screen__mobile'>
+										<div className='cart-screen__img'>
+											<img
+												src={`http://localhost:5000/images/${item.image}`}
+												alt={item.name}
+											/>
+										</div>
+
+										<div className='cart-screen__info'>
+											<span
+												className='cart-screen__name'
+												onClick={() => navigate(`/product/${item._id}`)}>
+												{item.name}
+											</span>
+											<span className='cart-screen__author'>{item.author}</span>
+											<span className='price'>${item.price}</span>
+										</div>
+
+										<div className='cart-screen__mobile-actions'>
+											<div className='cart-screen__stepper'>
+												<InputStepperCart value={item.qty} id={item._id} />
+											</div>
+											<button
+												className='btn cart-screen__mobile-btn'
+												onClick={() => dispatch(removeFromCart(item._id))}>
+												Delete
+											</button>
+										</div>
+									</div>
+								))}
+							</div>
+						) : (
 							<table className='cart-screen__table'>
 								<tbody>
 									<tr className='cart-screen__headings'>
@@ -103,8 +145,8 @@ const CartScreen = () => {
 									))}
 								</tbody>
 							</table>
-						</div>
-					)}
+						)}
+					</div>
 				</div>
 
 				<table className='cart-screen__details'>
@@ -116,7 +158,9 @@ const CartScreen = () => {
 
 						<tr>
 							<td colSpan='2'>
-								<Btn utility='with-full'>Proceed to checkout</Btn>
+								<Btn handler={onCheckout} utility='width-full'>
+									Proceed to checkout
+								</Btn>
 							</td>
 						</tr>
 					</tbody>

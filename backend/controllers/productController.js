@@ -37,24 +37,12 @@ export const resizeProductPhoto = (req, file, next) => {
 
 // @route	GET /api/products
 export const getAllProducts = catchAsync(async (req, res, next) => {
-	const pageSize = 10;
-	const page = Number(req.query.pageNumber) || 1;
+	const products = await Product.find({});
 
-	const keyword = req.query.keyword
-		? {
-				name: {
-					$regex: req.query.keyword,
-					$options: 'i',
-				},
-		  }
-		: {};
-
-	const count = await Product.countDocuments({ ...keyword });
-	const products = await Product.find({ ...keyword })
-		.limit(pageSize)
-		.skip(pageSize * (page - 1));
-
-	res.json({ products, page, pages: Math.ceil(count / pageSize) });
+	res.status(200).json({
+		status: 'success',
+		products,
+	});
 });
 
 // @route   GET /api/products/:id
@@ -73,9 +61,16 @@ export const getProduct = catchAsync(async (req, res, next) => {
 	});
 });
 
+// @desc    Create product
 // @route	POST /api/products
+// @access	Private/Admin
 export const createProduct = catchAsync(async (req, res, next) => {
-	const newProduct = await Product.create(req.body);
+	const bodyProduct = {
+		...req.body,
+		category: JSON.parse(req.body.category),
+	};
+
+	const newProduct = await Product.create(bodyProduct);
 
 	res.status(201).json({
 		status: 'success',
@@ -85,11 +80,15 @@ export const createProduct = catchAsync(async (req, res, next) => {
 	});
 });
 
-// @route	PUT /api/products/:id
+// @route	PATCH /api/products/:id
 export const updateProduct = catchAsync(async (req, res, next) => {
 	const bodyProduct = req.file
-		? { ...req.body, image: req.file.filename }
-		: req.body;
+		? {
+				...req.body,
+				category: JSON.parse(req.body.category),
+				image: req.file.filename,
+		  }
+		: { ...req.body, category: JSON.parse(req.body.category) };
 
 	const product = await Product.findByIdAndUpdate(req.params.id, bodyProduct, {
 		new: true,
@@ -108,7 +107,9 @@ export const updateProduct = catchAsync(async (req, res, next) => {
 	});
 });
 
+// @desc    Delete product by id
 // @route	DELETE /api/products/:id
+// @access	Private/Admin
 export const deleteProduct = catchAsync(async (req, res, next) => {
 	const product = await Product.findByIdAndDelete(req.params.id);
 
