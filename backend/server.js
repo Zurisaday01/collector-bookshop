@@ -35,6 +35,10 @@ app.use(
 	})
 );
 
+app.get('/', (req, res) => {
+	res.send('API is running....');
+});
+
 app.use(function (req, res, next) {
 	res.header(
 		'Access-Control-Allow-Methods',
@@ -95,27 +99,25 @@ app.get('/api/config/paypal', (req, res) => {
 	res.send(process.env.PAYPAL_CLIENT_ID);
 });
 
-if (process.env.NODE_ENV === 'production') {
-	const __dirname = path.resolve();
-	// any route that is not api will be redirected to index.html
-	app.get('*', (req, res) =>
-		res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'))
-	);
+// if (process.env.NODE_ENV === 'production') {
+// 	const __dirname = path.resolve();
+// 	// any route that is not api will be redirected to index.html
+// 	app.get('*', (req, res) =>
+// 		res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'))
+// 	);
 
-	app.use(
-		'/images',
-		express.static(path.join(__dirname, 'public/img/products'))
-	);
-	app.use('/images', express.static(path.join(__dirname, 'public/img/users')));
-	// set static folder
-	app.use(express.static(path.join(__dirname, '/frontend/build')));
-
-	console.log(path.join(__dirname, 'frontend', 'build', 'index.html'));
-} else {
-	app.get('/', (req, res) => {
-		res.send('API is running....');
-	});
-}
+// 	app.use(
+// 		'/images',
+// 		express.static(path.join(__dirname, 'public/img/products'))
+// 	);
+// 	app.use('/images', express.static(path.join(__dirname, 'public/img/users')));
+// 	// set static folder
+// 	app.use(express.static(path.join(__dirname, '/frontend/build')));
+// } else {
+// 	app.get('/', (req, res) => {
+// 		res.send('API is running....');
+// 	});
+// }
 
 // affect all http requests
 app.all('*', (req, res, next) => {
